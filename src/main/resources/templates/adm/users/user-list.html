@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{adm/fragments/layout :: main-fragment(~{:: #css}, ~{:: .wrapper}, ~{:: #javascript})}">
+
+<head>
+	<!-- Ionicons -->
+	<th:block id="css">
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+	</th:block>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div class="wrapper">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-12">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item">
+									<a href="/admin">Dashboard</a>
+								</li>
+								<li class="breadcrumb-item active">
+									User List
+								</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<style>
+						.search{
+							display: flex;
+							justify-content: center;
+							align-items: center;
+						}
+						.search input{
+							width: 400px;
+							outline: none;
+							border: none;
+							background-color: transparent;
+						}
+						.search button{
+							border: none;
+						}
+						.wrapper-input{
+							display: flex;
+							justify-content: center;
+							border: 2px #3333 solid;
+							padding: 4px 8px;
+							background-color: white;
+							border-radius: 10px;
+						}
+					</style>
+					<div class="search">
+						<div class="wrapper-input">
+							<input class="input-search" type="search" placeholder="Tìm kiếm tên hoặc email">
+							<button  type="button" class="btn btn-primary btn-search">
+								<i class="fa-solid fa-magnifying-glass"></i>
+							</button>
+						</div>
+					</div>
+					<th:block th:if="${sharedModel.isRootAdminRole}">
+					<div class="row py-2">
+						<div class="col-12">
+							<a href="/admin/users/user-create">
+								<button type="button" class="btn btn-primary">
+									<i class="fas fa-plus"></i> Create user
+								</button>
+							</a>
+						</div>
+					</div>
+					</th:block>
+					<style>
+						.menu{
+							display: flex;
+							position: relative;
+							justify-content: center;
+							align-items: center;
+							margin: 8px 0;
+						}
+						.type-user{
+							padding: 12px 8px;
+							font-size: 18px;
+							width: 150px;
+							text-align: center;
+							cursor: pointer;
+						}
+						.type-user:hover{
+							background-color: #cbc8c8;
+						}
+						.slide {
+							position: absolute;
+							bottom: 0;
+							height: 2px;
+							background-color: red;
+							transition: left 0.3s ease;
+						}
+					</style>
+					<div class="menu">
+						<div data-link="all" class="type-user all active-type">All User</div>
+						<div data-link="activity" class="type-user active-user">User Active</div>
+						<div data-link="not-activity" class="type-user not-active-user">User Not Active</div>
+						<span class="slide"></span>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<table class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>Name</th>
+												<th>Email</th>
+												<th>Phone</th>
+												<th>Roles</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										<tbody id="user-table">
+										<th:block  th:with="userList = ${page.getContent()}">
+											<tr th:each="user: ${userList}" >
+												<td>
+													<a th:text="${user.id}" > Name</a>
+												</td>
+												<td>
+													<a th:text="${user.name}" > Name</a>
+												</td>
+												<td>
+													<a th:text="${user.email}">Email</a>
+												</td>
+												<td>
+													<a th:text="${user.phone}">Phone</a>
+												</td>
+												<td>
+												<th:block th:each="role: ${user.roles}">
+													<span th:text="${role.name}"> role </span>
+												</th:block>
+												</td>
+												<td>
+													<span >
+														<a th:href="@{/admin/users/{id}/detail (id=${user.id})}">
+															<button type="button"
+																	class="btn btn-info px-4"> Detail
+															</button>
+														</a>
+														<span>
+															<button th:if="${user.status}"
+																	type="button"
+																	class="btn btn-danger user-delete-btn"
+																	onclick="deleteUsers(this)"
+																	th:data-id="${user.id}">
+																Delete
+															</button>
+
+															<button th:unless="${user.status}"
+																	type="button"
+																	class="btn btn-primary btn-active-user"
+																	th:data-id="${user.id}"
+																	onclick="activityUsers(this)">
+																Active
+															</button>
+														</span>
+													</span>
+												</td>
+											</tr>
+										</th:block>
+										</tbody>
+									</table>
+
+									<div class="d-flex justify-content-center mt-3" id="pagination">
+										<ul class="pagination mb-0">
+											<li class="paginate_button page-item previous" th:classappend="${currentPage == 0 ? 'disabled' : ''}" id="example2_previous">
+												<a th:href="@{/admin/hotels/hotel-list?page={pageNumber} (pageNumber= ${currentPage - 1})}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+											</li>
+
+											<th:block th:with="numbers = ${T(com.example.demo.ultils.Utils).createList(page.getTotalPages())}">
+												<li th:each="number: ${numbers}" class="paginate_button page-item" th:classappend="${number == currentPage + 1 ? 'active' : ''}">
+													<a th:href="@{/admin/hotels/hotel-list?page={pageNumber} (pageNumber=${number}-1) }" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link" th:text="${number}"> </a>
+												</li>
+											</th:block>
+
+											<li class="paginate_button page-item next" id="example2_next" th:classappend="${currentPage == page.getTotalPages() -1 ? 'disabled' : ''}">
+												<a th:href="@{/admin/hotels/hotel-list?page={pageNumber} (pageNumber= ${currentPage + 1})}" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	<th:block id="javascript">
+		<script src="/adm/js/deleteUser.js"></script>
+		<script src="/adm/js/activityUser.js"></script>
+		<script src="/adm/js/callDataUser.js"></script>
+	</th:block>
+</body>
+
+</html>

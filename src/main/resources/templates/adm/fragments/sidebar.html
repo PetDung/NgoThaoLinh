@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang=vi dir=auto xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+    <meta charset=utf-8>
+    <title>Title</title>
+</head>
+
+<body>
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a th:href="@{/admin}" class="brand-link">
+<!--            <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"-->
+<!--                 style="opacity: 0.8" />-->
+            <span class="brand-text font-weight-light">Pet Hotel Admin Page</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-chart-pie"></i>
+                            <p>
+                                User
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/users/user-list}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>User List</p>
+                                </a>
+                            </li>
+                            <th:block th:if="${sharedModel.isRootAdminRole}">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/users/user-create}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Create User</p>
+                                </a>
+                            </li>
+                            </th:block>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-tree"></i>
+                            <p>
+                                Hotel
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <th:block th:if="${sharedModel.isRootAdminRole}">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/hotels/hotel-list}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Hotel List</p>
+                                </a>
+                            </li>
+                            </th:block>
+
+                            <th:block th:if="${sharedModel.isAdminRole}">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/hotels/my-hotels}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>My Hotel List</p>
+                                </a>
+                            </li>
+                            </th:block>
+
+                            <th:block th:if="${sharedModel.isRootAdminRole}">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/hotels/hotel-create}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Create Hotel</p>
+                                </a>
+                            </li>
+                            </th:block>
+                        </ul>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-tree"></i>
+                            <p>
+                                Room Type
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/room-types/room-type-list}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Room Type List</p>
+                                </a>
+                            </li>
+
+                            <th:block th:if="${sharedModel.isRootAdminRole}">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/room-types/room-type-create}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Create Room Type</p>
+                                </a>
+                            </li>
+                            </th:block>
+                        </ul>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-tree"></i>
+                            <p>
+                                Room Booking
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/room-bookings/room-booking-list}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Booking List</p>
+                                </a>
+                            </li>
+
+                            <th:block th:if="${sharedModel.isAdminRole}">
+                            <li class="nav-item">
+                                <a th:href="@{/admin/room-bookings/my-room-bookings}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>My Booking List</p>
+                                </a>
+                            </li>
+                            </th:block>
+                            <li class="nav-item">
+                                <a th:href="@{/admin/room-bookings/room-booking-create}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Create Booking</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+    </aside>
+</body>
+</html>
